@@ -350,7 +350,7 @@ var WaveSurfer = {
             }
         } else {
             start = 0;
-            end = width;
+            end = width*end;
             var peaks = this.backend.getPeaks(width, start, end);
             this.drawer.drawPeaks(peaks, width, start, end);
         }
@@ -625,6 +625,46 @@ var WaveSurfer = {
         this.backend.destroy();
         this.drawer.destroy();
         this.isDestroyed = true;
+    },
+
+
+    /* Auddly specific methods */
+
+    initAuddly: function() {
+        this.auPlaying = false;
+        this.auCreateTimer();
+    },
+
+    auCreateTimer: function () {
+        var my = this;
+
+        var onAudioProcess = function () {
+            if (!my.auPlaying) { return; }
+
+            my.fireEvent('waveform-progress');
+
+            // Call again in the next frame
+            var requestAnimationFrame = window.requestAnimationFrame || window.webkitRequestAnimationFrame;
+            requestAnimationFrame(onAudioProcess);
+        };
+
+        this.on('playWaveform', onAudioProcess);
+    },
+
+    auPlay: function (start, end) {
+        this.auSeekTo(start);
+        end && this.setPlayEnd(end);
+        // this.backend.play(start, end);
+        this.auPlaying = true;
+        this.fireEvent('playWaveform');
+    },
+
+    auPause: function() {
+        this.auPlaying = false;
+    },
+
+    auSeekTo: function(progress) {
+        this.drawer.progress(progress);
     }
 };
 
