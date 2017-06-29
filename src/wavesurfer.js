@@ -100,7 +100,7 @@ var WaveSurfer = {
         // Click-to-seek
         this.drawer.on('click', function (e, progress) {
             setTimeout(function () {
-                my.auSeekTo(progress);
+                my.auSeekTo(progress, true);
             }, 0);
         });
 
@@ -663,10 +663,13 @@ var WaveSurfer = {
         this.auPlaying = false;
     },
 
-    auSeekTo: function(progress) {
+    auSeekTo: function(progress, fireEvent) {
         this.drawer.progress(progress);
-        this.fireEvent('auSeek');
-    }
+
+        if (fireEvent) {
+            this.fireEvent('auSeek', progress);
+        }
+    },
 };
 
 WaveSurfer.create = function (params) {
