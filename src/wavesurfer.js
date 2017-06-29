@@ -100,7 +100,7 @@ var WaveSurfer = {
         // Click-to-seek
         this.drawer.on('click', function (e, progress) {
             setTimeout(function () {
-                my.seekTo(progress);
+                my.auSeekTo(progress);
             }, 0);
         });
 
@@ -648,7 +648,7 @@ var WaveSurfer = {
             requestAnimationFrame(onAudioProcess);
         };
 
-        this.on('playWaveform', onAudioProcess);
+        this.on('auPlayWaveform', onAudioProcess);
     },
 
     auPlay: function (start, end) {
@@ -656,7 +656,7 @@ var WaveSurfer = {
         end && this.setPlayEnd(end);
         // this.backend.play(start, end);
         this.auPlaying = true;
-        this.fireEvent('playWaveform');
+        this.fireEvent('auPlayWaveform');
     },
 
     auPause: function() {
@@ -665,6 +665,7 @@ var WaveSurfer = {
 
     auSeekTo: function(progress) {
         this.drawer.progress(progress);
+        this.fireEvent('auSeek');
     }
 };
 
