@@ -145,7 +145,11 @@ WaveSurfer.Drawer = {
     },
 
     getScrollX: function() {
-        return Math.round(this.wrapper.scrollLeft * this.params.pixelRatio);
+        if (this.wrapper) {
+            return Math.round(this.wrapper.scrollLeft * this.params.pixelRatio);
+        } else {
+            return 0;
+        }
     },
 
     getWidth: function () {
